@@ -1,10 +1,10 @@
-import { ClientpanelPage } from './app.po';
+import { AppPage } from './app.po';
 
-describe('clientpanel App', () => {
-  let page: ClientpanelPage;
+describe('panel App', () => {
+  let page: AppPage;
 
   beforeEach(() => {
-    page = new ClientpanelPage();
+    page = new AppPage();
   });
 
   it('should display welcome message', () => {

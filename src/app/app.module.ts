@@ -1,13 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes} from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FlashMessagesModule } from 'angular2-flash-messages';
-//AngularFire Imports
+
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { AngularFireAuth } from 'angularfire2/auth';
-//Component Imports
+import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { environment } from '../environments/environment';
+
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ClientsComponent } from './components/clients/clients.component';
@@ -20,31 +21,23 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-//Service Imports
 import { ClientService } from './services/client.service';
 import { AuthService } from './services/auth.service';
-import { AuthGuard } from './guards/auth.guard';
+import { AuthGuard } from './guard/auth.guard';
 import { SettingsService } from './services/settings.service';
-import { RegisterGuard } from './guards/register.guard';
+import { RegisterGaurd } from './guard/register.guard';
 
-const appRoutes:Routes = [
-  {path:'', component:DashboardComponent, canActivate:[AuthGuard]},
-  {path:'register', component:RegisterComponent, canActivate:[RegisterGuard]},
-  {path:'login', component:LoginComponent},
-  {path:'add-client', component:AddClientComponent, canActivate:[AuthGuard]},
-  {path:'client/:id', component:ClientDetailsComponent, canActivate:[AuthGuard]},
-  {path:'edit-client/:id', component:EditClientComponent, canActivate:[AuthGuard]},
-  {path:'settings', component:SettingsComponent, canActivate:[AuthGuard]},
-  {path:'**', component:PageNotFoundComponent}
+//create routes
+const appRoutes: Routes = [
+  { path: '', component: DashboardComponent, canActivate:[AuthGuard] },
+  { path: 'register', component: RegisterComponent, canActivate:[RegisterGaurd] },
+  { path: 'login', component: LoginComponent },
+  { path: 'add-client', component: AddClientComponent, canActivate:[AuthGuard] },
+  { path: 'client/:id', component: ClientDetailsComponent, canActivate:[AuthGuard] },
+  { path: 'edit-client/:id', component: EditClientComponent, canActivate:[AuthGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate:[AuthGuard] },
+  { path: '**', component: PageNotFoundComponent }
 ]
-
-export const firebaseConfig = {
-  apiKey: "AIzaSyDwkgjZd7Xd4wF_rfbvlbldc8YWD6MOKIQ",
-  authDomain: "clientpanel-25991.firebaseapp.com",
-  databaseURL: "https://clientpanel-25991.firebaseio.com",
-  storageBucket: "clientpanel-25991.appspot.com",
-  messagingSenderId: "1021455770770"
-}
 
 @NgModule({
   declarations: [
@@ -64,18 +57,19 @@ export const firebaseConfig = {
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebase, "panel"),
+    AngularFireAuthModule,
     FormsModule,
     FlashMessagesModule
   ],
   providers: [
-    AngularFireAuth,
     AngularFireDatabase,
+    AngularFireDatabaseModule,
     ClientService,
     AuthService,
     AuthGuard,
     SettingsService,
-    RegisterGuard
+    RegisterGaurd
   ],
   bootstrap: [AppComponent]
 })

@@ -3,16 +3,16 @@ import { CanActivate, Router } from '@angular/router';
 import { SettingsService } from '../services/settings.service';
 
 @Injectable()
-export class RegisterGuard implements CanActivate{
+export class RegisterGaurd implements CanActivate {
     constructor(
-        private router:Router,
-        private settingsService:SettingsService
-    ){}
+        private router: Router,
+        private settingsService: SettingsService
+    ) {}
 
-    canActivate():boolean{
-        if(this.settingsService.getSettings().allowRegistration){
+    canActivate(): boolean {
+        if(this.settingsService.getSettings().allowRegistration) {
             return true;
-        }else{
+        } else {
             this.router.navigate(['/login']);
             return false;
         }

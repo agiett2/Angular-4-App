@@ -11,41 +11,49 @@ import { SettingsService } from '../../services/settings.service';
   styleUrls: ['./edit-client.component.css']
 })
 export class EditClientComponent implements OnInit {
-  id:string;
-  client:Client = {
-    firstName: '',
-    lastName: '',
+  id: string;
+  client: Client = {
+    firstname: '',
+    lastname: '',
     email: '',
-    phone: '',
+    phone:'',
     balance: 0
- }
-  disableBalanceOnEdit:boolean = true;
+  }
+
+  disableBalanceOnEdit: boolean;
 
   constructor(
-    public clientService:ClientService, 
-    public router:Router, 
-    public route:ActivatedRoute, 
-    public flashMessagesService:FlashMessagesService,
-    public settingsService:SettingsService
+    private clientService: ClientService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private flashMessagesService: FlashMessagesService,
+    private settingsService: SettingsService
   ) { }
 
   ngOnInit() {
-    this.disableBalanceOnEdit = this.settingsService.getSettings().disableBalanceOnEdit;
     this.id = this.route.snapshot.params['id'];
     //Get Client
     this.clientService.getClient(this.id).subscribe(client => {
       this.client = client;
     });
+    this.disableBalanceOnEdit = this.settingsService.getSettings().disableBalanceOnEdit;
   }
-  onSubmit({value,valid}:{value:Client, valid:boolean}){
-   if(!valid){
-    this.flashMessagesService.show('Please fill in all fields', {cssClass:'alert-danger', timeout:4000});
-    this.router.navigate(['edit-client/'+this.id]);
-   }else{
-    //Update client
-    this.clientService.updateClient(this.id, value);
-    this.flashMessagesService.show('Client Updated', {cssClass:'alert-success', timeout:4000});
-    this.router.navigate(['/client/'+this.id]);
-   }
+
+  onSubmit({value, valid}: {value: Client, valid: boolean}){
+   
+    if (!valid){
+      this.flashMessagesService.show('Please fill in all the blanks', {
+        cssClass:'alert-danger', timeout: 4000
+      });
+      this.router.navigate(['edit-client/'+this.id]);
+    }else {
+      //Update Client
+      this.clientService.updateClient(this.id, value);
+      this.flashMessagesService.show('client updated', {
+        cssClass:'alert-success', timeout: 4000
+      });
+      this.router.navigate(['/client/'+this.id]);
+    }
   }
+
 }

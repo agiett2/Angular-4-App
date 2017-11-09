@@ -10,38 +10,47 @@ import { Client } from '../../models/client';
   styleUrls: ['./client-details.component.css']
 })
 export class ClientDetailsComponent implements OnInit {
-  id:string;
-  client:Client;
-  hasBalance:boolean=false;
-  showBalanceUpdateInput:boolean = false; 
+  id: string;
+  client: Client;
+  hasBalance: boolean = false;
+  showBalanceUpdateInput: boolean= false;
 
   constructor(
-    public clientService:ClientService, 
-    public router:Router, 
-    public route:ActivatedRoute, 
-    public flashMessagesService:FlashMessagesService) { }
+    private clientService: ClientService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private flashMessagesService: FlashMessagesService
+  ) { }
 
-  ngOnInit(){
-    //Get ID
+  ngOnInit() {
+    //Get id from url
     this.id = this.route.snapshot.params['id'];
+    //Get client
     this.clientService.getClient(this.id).subscribe(client => {
-      if(client.balance > 0){
+      if(client.balance > 0) {
         this.hasBalance = true;
       }
       this.client = client;
+      console.log(this.client);
     });
   }
-  updateBalance(id:string){
-    //Update client
+
+  updateBalabce(id: string){
     this.clientService.updateClient(this.id, this.client);
-    this.flashMessagesService.show('Blance Updated', {cssClass:'alert-success', timeout: 4000});
+    this.flashMessagesService.show('balance updated', {
+      cssClass: 'alert-success', timeout: 4000
+    });
     this.router.navigate(['/client/'+this.id]);
   }
+
   onDeleteClick(){
     if(confirm("Are you sure to delete?")){
       this.clientService.deleteClient(this.id);
-      this.flashMessagesService.show('Client Deleted', {cssClass:'alert-success', timeout: 4000});
+      this.flashMessagesService.show('Client deleted', {
+        cssClass: 'alert-success', timeout: 4000
+      });
       this.router.navigate(['/']);
-    }
+    };
+    
   }
 }
